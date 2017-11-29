@@ -5,7 +5,7 @@ This is a simple jQuery plugin that allows for creation of events/appointments/r
 This plugin was started because of the lack of simple day schedulers available. There is an abundace of full month calendar views, but nothing for a single day. I was working on a project for school that would create a reservation system for our 3d printers, but couldn't find anything to display reservations. This project is what I wish I had found 6 months a go.
 
 ## Demo
-### [See it in action!]()
+### [See it in action!](https://johnsolo15.github.io/jquery-scheduler/)
 
 ![Demo](https://github.com/johnsolo15/jquery-scheduler/blob/master/example/scheduler.png)
 
