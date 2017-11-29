@@ -18,6 +18,7 @@ Include files:
 ```
 <link rel="stylesheet" href="/path/to/jquery.scheduler.css"></link>
 <script src="/path/to/jquery.js"></script>
+<script src="/path/to/date.format.min.js"></script>
 <script src="/path/to/jquery.scheduler.js"></script>
  ```
  ### Use
@@ -35,6 +36,7 @@ Putting it all together:
 <head>
     <link rel="stylesheet" href="jquery.scheduler.css"></link>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="date.format.min.js"></script>
     <script src="jquery.scheduler.js"></script>
 </head>
 
@@ -49,3 +51,5 @@ Putting it all together:
 ```
 ### Options
 Coming soon...
+## Acknowledgements
+Big thanks to [jacwright](https://github.com/jacwright) for writing the [date.format library](https://github.com/jacwright/date.format) I used to help deal with that pesky javascript date object. 
