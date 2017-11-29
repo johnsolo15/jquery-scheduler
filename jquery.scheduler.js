@@ -126,7 +126,7 @@
         
         next: function(e) {
             var settings = e.data.settings;
-            console.log(settings.reservations);
+
             clearCalendar();
             date.change(true);
             loadRsvns(date.get(), settings.reservations, settings);
@@ -349,7 +349,7 @@
                         height = settings.timeslotHeight + 1,
                         left = (start - firstHour) * settings.timeslotWidth,
                         width = (end - start) * settings.timeslotWidth + 1;
-                    console.log(top, height, left, width);
+
                     $rsvn.addClass("reservation").addClass("reservation-final")
                     .css({
                         top: top,
