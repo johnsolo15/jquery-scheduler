@@ -1,0 +1,122 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  
+}
+
+body {
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
+  text-align: center;
+}
+
+#scheduler {
+  display: inline-flex;
+  flex-direction: column;
+  background: white;
+  font-family: Verdana, sans-serif;
+  cursor: default;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background: linear-gradient(to bottom right, #595959, #a6a6a6);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.header > div {
+  padding: 12px 12px;
+}
+
+.button:hover {
+  background: #595959; 
+  cursor: pointer;
+}
+
+.body {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  border-right: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.row-header-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.row-header {
+  display: flex;
+  color: #595959;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.row-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.column-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.hour {
+  height: 100%;
+  background: linear-gradient(#f2f2f2, #d9d9d9);
+  border-left: 1px solid #d9d9d9;
+  padding: 4px 0px;
+  color: #595959;
+}
+
+.rsvn-container {
+  position: relative;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.cell {
+  border-left: 1px solid #d9d9d9;
+  border-top: 1px solid #d9d9d9;
+}
+
+.reservation {
+  position: absolute;
+  border: 1px solid #a6a6a6;
+  border-radius: 5px;
+  z-index: 1;
+}
+
+.reservation-final {
+  background: #fffff0;
+  background: linear-gradient(#3e9ee5, #216ccc);
+  z-index: 2;
+}
+
+.reservation-creating {
+  background: #b3b3b3;
+  background: linear-gradient(#b3b3b3, #a6a6a6);
+  opacity: .75;
+  z-index: 1;
+}
+
+.reservation-error {
+  background: #ff944d;
+  background: linear-gradient(#ff944d, #ff8533);
+}

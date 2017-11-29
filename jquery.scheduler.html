@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="jquery.scheduler.css"></link>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="jquery.scheduler.js"></script>
+</head>
+<body>
+
+<div id="scheduler" style="padding-top: 50px;"></div>
+<div id="log"></div>
+
+<script>
+var events = [
+                {date: '2017-11-30', start: '8:00', end: '13:00', row: 0}, 
+                {date: '2017-11-28', start: '8:00', end: '16:00', row: 1}, 
+                {date: '2017-11-28', start: '7:00', end: '9:00', row: 3}, 
+                {date: '2017-11-28', start: '12:00', end: '20:00', row: 5}, 
+                {date: '2017-11-29', start: '12:00', end: '18:00', row: 5}, 
+                {date: '2017-11-30', start: '8:00', end: '18:00', row: 4}
+              ];
+              
+var printers = ['Printer 1', 'Printer 2', 'Printer 3', 'Printer 4', 'Printer 5', 'Printer 6'];
+
+$("#scheduler").scheduler({items: printers, reservations: events});
+
+$(document).on('click', ".reservation", function () {
+    $(this).remove();
+});
+
+</script>
+
+</body>
+</html>
