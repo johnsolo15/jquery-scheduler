@@ -2,9 +2,8 @@
 <html>
 <head>
 <link rel="stylesheet" href="jquery.scheduler.css"></link>
-<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="date.format.min.js"></script>
 <script src="jquery.scheduler.js"></script>
 </head>
 <body>
@@ -13,19 +12,36 @@
 <div id="log"></div>
 
 <script>
-var events = [
-                {date: '2017-11-30', start: '8:00', end: '13:00', row: 0}, 
-                {date: '2017-11-28', start: '8:00', end: '16:00', row: 1}, 
-                {date: '2017-11-28', start: '7:00', end: '9:00', row: 3}, 
-                {date: '2017-11-28', start: '12:00', end: '20:00', row: 5}, 
-                {date: '2017-11-29', start: '12:00', end: '18:00', row: 5}, 
-                {date: '2017-11-30', start: '8:00', end: '18:00', row: 4}
+// Sets dates for example reservations to always be on current day or after
+var date = new Date(),
+    day = date.getDate(),
+    date1 = new Date(),
+    date2 = new Date(),
+    date3 = new Date();
+date1.setDate(day);
+date2.setDate(day + 1);
+date3.setDate(day + 2);
+date1 = date1.format('Y-m-d');
+date2 = date2.format('Y-m-d');
+date3 = date3.format('Y-m-d');
+
+// Array of example date
+var reservations = [
+                {date: date3, start: '8:00', end: '13:00', row: 0}, 
+                {date: date1, start: '8:00', end: '16:00', row: 1}, 
+                {date: date1, start: '7:00', end: '9:00', row: 3}, 
+                {date: date1, start: '12:00', end: '20:00', row: 5}, 
+                {date: date2, start: '12:00', end: '18:00', row: 5}, 
+                {date: date3, start: '8:00', end: '18:00', row: 4}
               ];
-              
+
+// Array of sample items              
 var printers = ['Printer 1', 'Printer 2', 'Printer 3', 'Printer 4', 'Printer 5', 'Printer 6'];
 
-$("#scheduler").scheduler({items: printers, reservations: events});
+// Initialize 
+$("#scheduler").scheduler({items: printers, reservations: reservations, timeslotHeight: 70, timeslotWidth: 100});
 
+// Allows for reservation deletion
 $(document).on('click', ".reservation", function () {
     $(this).remove();
 });
