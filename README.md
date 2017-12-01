@@ -22,7 +22,7 @@ Include files:
 <script src="/path/to/jquery.scheduler.js"></script>
  ```
  ### Use
-Create a div with the id `id="scheduler"`:
+On the file you want to include the plugin, create a div with the id `id="scheduler"`:
 ```html
 <div id="scheduler"></div>
 ```
