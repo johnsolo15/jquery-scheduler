@@ -1,8 +1,8 @@
 # jQuery-scheduler
 #### What?
-This is a simple jQuery plugin that allows for creation of events/appointments/reservations with clicking and dragging of the mouse. It provides a day view calendar with timeslots for multiple reservation items. Implementing is quick, and reqiures little development on the user's part. It is still in development with a lot of stuff to add, so this is only for demonstration purposes.
+This is a simple jQuery plugin that allows for creation of events/appointments/reservations with clicking and dragging of the mouse. It provides a day view calendar with timeslots for multiple reservation items. Implementing is quick, and requires little development on the user's part. It is still in development with a lot of stuff to add, so this is only for demonstration purposes.
 #### Why?
-This plugin was started because of the lack of simple day schedulers available. There is an abundace of full month calendar views, but nothing for a single day. I was working on a project for school that would create a reservation system for our 3d printers, but couldn't find anything to display reservations. This project is what I wish I had found 6 months a go.
+This plugin was started because of the lack of simple day schedulers available. There is an abundance of full month calendar views, but nothing for a single day. I was working on a project for school that would create a reservation system for our 3d printers, but couldn't find anything to display reservations. This project is what I wish I had found 6 months a go.
 
 ## Demo
 ### [See it in action!](https://johnsolo15.github.io/jquery-scheduler/)
@@ -11,7 +11,7 @@ This plugin was started because of the lack of simple day schedulers available. 
 
 ## Getting Started
 ### Install
-* Clone the repository: `git clone https://github.com/johnsolo15/jquery-scheduler.git` 
+* Clone the repository: `git clone https://github.com/johnsolo15/jquery-scheduler.git`
 * Download the zip file
 
 Include files:
