@@ -9,8 +9,7 @@
         use24Hour       : false,
         timeslotHeight  : 40,
         timeslotWidth   : 75,
-        items           : ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'],
-        reservations    : []
+        items           : ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6']
     };
 
     var _private = {        
@@ -111,21 +110,21 @@
             prev: function() {
                 _private.clearCalendar.call(this);
                 _private.date.change(false);
-                _private.loadRsvns.call(this, _private.date.get());
+                _private.showRsvns.call(this, _private.date.get());
             },
             
             next: function() {
                 _private.clearCalendar.call(this);
                 _private.date.change(true);
-                _private.loadRsvns.call(this, _private.date.get());
+                _private.showRsvns.call(this, _private.date.get());
             },
             
             date: function() {
                 var today = new Date();
                 
-                _private.clearCalendar.call(this).call(this);
+                _private.clearCalendar.call(this);
                 _private.date.set(today);
-                _private.loadRsvns.call(this, today);
+                _private.showRsvns.call(this, today);
             }
         },
 
@@ -313,9 +312,11 @@
         * The array has a date in Y-m-d format, and hours in 24 hour time format
         *
         */
-        loadRsvns: function(date) {
-            var settings = $(this).data(pluginName).settings,
-                rsvns = $(this).data(pluginName).settings.reservations;
+        showRsvns: function(date) {
+            var date = date.format('Y-m-d'),
+                settings = $(this).data(pluginName).settings,
+                rsvns = $(this).data(pluginName).reservations[date] || [],
+                $rsvns = [];
         
             if (settings.use24Hour == true) {
                 var firstHour = parseInt(settings.startTime.split(":")[0]),
@@ -324,34 +325,30 @@
                 var firstHour = parseInt(settings.startTime.split(" ")[0].split(":")[0]),
                     lastHour = parseInt(settings.endTime.split(" ")[0].split(":")[0]) + 12;
             }
-            var $rsvns = [];
-            date = date.format('Y-m-d');
             
             var i;
             for (i = 0; i < rsvns.length; i++) {
-                if (rsvns[i].date == date) {
-                    var start = parseInt(rsvns[i].start.split(":")[0]),
-                        end = parseInt(rsvns[i].end.split(":")[0]);
-                        
-                    if ((start >= firstHour && start <= lastHour) && (end >= firstHour && end <= lastHour) && (rsvns[i].row <= settings.items.length)) {
-                        var $rsvn = $("<div></div>"),
-                            top = rsvns[i].row * settings.timeslotHeight,
-                            height = settings.timeslotHeight + 1,
-                            left = (start - firstHour) * settings.timeslotWidth,
-                            width = (end - start) * settings.timeslotWidth + 1;
+                var start = parseInt(rsvns[i].start.split(":")[0]),
+                    end = parseInt(rsvns[i].end.split(":")[0]);
+                    
+                if ((start >= firstHour && start <= lastHour) && (end >= firstHour && end <= lastHour) && (rsvns[i].row <= settings.items.length)) {
+                    var $rsvn = $("<div></div>"),
+                        top = rsvns[i].row * settings.timeslotHeight,
+                        height = settings.timeslotHeight + 1,
+                        left = (start - firstHour) * settings.timeslotWidth,
+                        width = (end - start) * settings.timeslotWidth + 1;
 
-                        $rsvn.addClass("reservation").addClass("reservation-final")
-                        .css({
-                            top: top,
-                            height: height,
-                            left: left,
-                            width: width
-                        });
-                        
-                        $rsvns.push($rsvn);
-                    } else {
-                        console.log("Error: " + rsvns[i] + " is outside of the scheduler time frame");
-                    }
+                    $rsvn.addClass("reservation").addClass("reservation-final")
+                    .css({
+                        top: top,
+                        height: height,
+                        left: left,
+                        width: width
+                    });
+                    
+                    $rsvns.push($rsvn);
+                } else {
+                    console.log("Error: " + rsvns[i] + " is outside of the scheduler time frame");
                 }
             }
             for (i = 0; i < $rsvns.length; i++) {
@@ -364,15 +361,24 @@
         init : function(options) {
             return this.each(function() {
                 data = {
-                    settings: $.extend({}, defaults, options)
+                    settings: $.extend({}, defaults, options),
+                    reservations: {}
                 };
                 $(this).data(pluginName, data);
                 _private.render.calendar.call(this);
                 _private.setSize.call(this);
                 _private.date.set(data.settings.startDate);   
                 _private.attachEventListeners.call(this);
-                _private.loadRsvns.call(this, data.settings.startDate);
+                _private.showRsvns.call(this, data.settings.startDate);
             });
+        },
+
+        loadRsvns: function(rsvns) {
+            for (var i = 0; i < rsvns.length; i++) {
+                this.data(pluginName).reservations[rsvns[i].date] = this.data(pluginName).reservations[rsvns[i].date] || [];
+                this.data(pluginName).reservations[rsvns[i].date].push(rsvns[i]);
+            }
+            _private.showRsvns.call(this, data.settings.startDate);
         }
     };
         
