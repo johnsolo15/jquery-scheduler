@@ -3,7 +3,9 @@
     var pluginName = 'scheduler';
 
     var defaults = {
-        startDate       : new Date(),
+        initialDate     : new Date(),
+        startDate       : null,
+        endDate         : null,
         startTime       : '7 AM',
         endTime         : '8 PM',
         use24Hour       : false,
@@ -91,15 +93,39 @@
             }
         },
 
-        // Attch event listeners for whole scheduler
+        //Attach event listeners for whole scheduler
         attachEventListeners: function() {
+            var settings = $(this).data(pluginName).settings,
+                currCalDate = _private.date.get();
+
             $(".row").on("mousedown.newevent", _private.listeners.row.bind(this));
 
-            $(".prev").on('click', _private.listeners.prev.bind(this));
+            if (settings.startDate === null || currCalDate > settings.startDate.setHours(0, 0, 0, 0)) {
+                $(".prev").on('click', _private.listeners.prev.bind(this));
+            } else {
+                $(".prev").css('cursor', 'no-drop');
+            }
 
-            $(".next").on('click', _private.listeners.next.bind(this));
+            if (settings.endDate === null || currCalDate < settings.endDate.setHours(0, 0, 0, 0)) {
+                $(".next").on('click', _private.listeners.next.bind(this));
+            } else {
+                $(".next").css('cursor', 'no-drop');
+            }
 
             $(".date").on('click', _private.listeners.date.bind(this));
+        },
+
+        unAttachEventListeners: function() {
+            $(".row").off("mousedown.newevent");
+
+            $(".prev").off('click');
+
+            $(".next").off('click');
+
+            $(".date").off('click');
+
+            $(".prev").css('cursor', 'pointer');
+            $(".next").css('cursor', 'pointer');
         },
         
         // Event listener functions to attach
@@ -111,12 +137,16 @@
             prev: function() {
                 _private.clearCalendar.call(this);
                 _private.date.change(false);
+                _private.unAttachEventListeners();
+                _private.attachEventListeners.call(this);
                 _private.showRsvns.call(this, _private.date.get());
             },
             
             next: function() {
                 _private.clearCalendar.call(this);
                 _private.date.change(true);
+                _private.unAttachEventListeners();
+                _private.attachEventListeners.call(this);
                 _private.showRsvns.call(this, _private.date.get());
             },
             
@@ -125,6 +155,8 @@
                 
                 _private.clearCalendar.call(this);
                 _private.date.set(today);
+                _private.unAttachEventListeners();
+                _private.attachEventListeners.call(this);
                 _private.showRsvns.call(this, today);
             }
         },
@@ -389,9 +421,9 @@
                 $(this).data(pluginName, data);
                 _private.render.calendar.call(this);
                 _private.setSize.call(this);
-                _private.date.set(data.settings.startDate);   
+                _private.date.set(data.settings.initialDate);   
                 _private.attachEventListeners.call(this);
-                _private.showRsvns.call(this, data.settings.startDate);
+                _private.showRsvns.call(this, data.settings.initialDate);
             });
         },
 
@@ -400,7 +432,7 @@
                 this.data(pluginName).reservations[rsvns[i].date] = this.data(pluginName).reservations[rsvns[i].date] || [];
                 this.data(pluginName).reservations[rsvns[i].date].push(rsvns[i]);
             }
-            _private.showRsvns.call(this, data.settings.startDate);
+            _private.showRsvns.call(this, data.settings.initialDate);
         }
     };
         
