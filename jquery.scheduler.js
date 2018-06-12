@@ -9,7 +9,8 @@
         use24Hour       : false,
         timeslotHeight  : 40,
         timeslotWidth   : 75,
-        items           : ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6']
+        items           : ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'],
+        onRsvnCreate    : function() {}
     };
 
     var _private = {        
@@ -195,6 +196,7 @@
             },
             
             end: function(e) {
+                var settings = $(this).data(pluginName).settings;
                 var $newRsvn = e.data.rsvn;
                 
                 if ($newRsvn.hasClass("reservation-error")) {
@@ -205,6 +207,26 @@
                 }
                 $(".row-container").off("mousemove.newevent");
                 $(document).off("mouseup.newevent");
+                
+                if (settings.use24Hour == true) {
+                    var calStartTime = parseInt(settings.startTime.split(":")[0]);
+                } else {
+                    var calStartTime = parseInt(settings.startTime.split(" ")[0].split(":")[0]);
+                }
+
+                var row = Math.floor($newRsvn.position().top / settings.timeslotHeight),
+                    start = Math.floor($newRsvn.position().left / settings.timeslotWidth) + calStartTime,
+                    end = Math.floor($newRsvn.outerWidth() / settings.timeslotWidth) + start,
+                    date = _private.date.get().format('Y-m-d'),
+                    rsvn = {date: date, start: start + '', end: end + '', row: row};
+
+                //possibly use methods.loadRsvn but would need to create a separate public showRsvn method instead
+                //of calling inside loadRsvn
+                $(this).data(pluginName).reservations[rsvn.date] = $(this).data(pluginName).reservations[rsvn.date] || [];
+                $(this).data(pluginName).reservations[rsvn.date].push(rsvn);
+                
+                //callback
+                settings.onRsvnCreate.call(this, rsvn);
             }   
         },
 
@@ -330,7 +352,7 @@
             for (i = 0; i < rsvns.length; i++) {
                 var start = parseInt(rsvns[i].start.split(":")[0]),
                     end = parseInt(rsvns[i].end.split(":")[0]);
-                    
+
                 if ((start >= firstHour && start <= lastHour) && (end >= firstHour && end <= lastHour) && (rsvns[i].row <= settings.items.length)) {
                     var $rsvn = $("<div></div>"),
                         top = rsvns[i].row * settings.timeslotHeight,
