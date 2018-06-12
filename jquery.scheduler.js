@@ -51,7 +51,7 @@
                 var items = $(context).data(pluginName).settings.items;
                 var rowHeaderContainer = $("<div></div>").addClass("row-header-container");
 
-                rowHeaderContainer.append("<div class='hour-header hour'>Printers</div>");
+                rowHeaderContainer.append("<div class='hour-header hour'></div>");
                 var i;
                 for (i = 0; i < items.length; i++) {
                     var header = $("<div></div>").addClass("row-header cell").text(items[i]);
