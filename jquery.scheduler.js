@@ -441,6 +441,10 @@
                 this.data(pluginName).reservations[rsvns[i].date].push(rsvns[i]);
             }
             _private.showRsvns.call(this, data.settings.initialDate);
+        },
+
+        getNewRsvns: function() {
+            return this.data(pluginName).tempReservations;
         }
     };
         
