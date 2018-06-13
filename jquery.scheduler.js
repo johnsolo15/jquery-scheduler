@@ -445,6 +445,15 @@
 
         getNewRsvns: function() {
             return this.data(pluginName).tempReservations;
+        },
+
+        updateRsvns: function(rsvns) {
+            for (var i = 0; i < rsvns.length; i++) {
+                this.data(pluginName).reservations[rsvns[i].date] = this.data(pluginName).reservations[rsvns[i].date] || [];
+                this.data(pluginName).reservations[rsvns[i].date].push(rsvns[i]);
+            }
+            _private.clearCalendar.call(this);
+            _private.showRsvns.call(this, _private.date.get());
         }
     };
         
