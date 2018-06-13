@@ -243,28 +243,28 @@
                 } else {
                     $newRsvn.removeClass("reservation-creating");
                     $newRsvn.addClass("reservation-temp");
+
+                    if (settings.use24Hour == true) {
+                        var calStartTime = parseInt(settings.startTime.split(":")[0]);
+                    } else {
+                        var calStartTime = parseInt(settings.startTime.split(" ")[0].split(":")[0]);
+                    }
+    
+                    var row = Math.floor($newRsvn.position().top / settings.timeslotHeight),
+                        start = Math.floor($newRsvn.position().left / settings.timeslotWidth) + calStartTime,
+                        end = Math.floor($newRsvn.outerWidth() / settings.timeslotWidth) + start,
+                        date = _private.date.get().format('Y-m-d'),
+                        rsvn = {date: date, start: start + '', end: end + '', row: row};
+    
+                    $(this).data(pluginName).tempReservations.push(rsvn);
+                    $newRsvn.on('click', rsvn, _private.listeners.removeRsvn.bind(this));
+
+                    //callback
+                    settings.onRsvnCreate.call(this, rsvn);
                 }
 
                 $(".row-container").off("mousemove.newevent");
                 $(document).off("mouseup.newevent");
-
-                if (settings.use24Hour == true) {
-                    var calStartTime = parseInt(settings.startTime.split(":")[0]);
-                } else {
-                    var calStartTime = parseInt(settings.startTime.split(" ")[0].split(":")[0]);
-                }
-
-                var row = Math.floor($newRsvn.position().top / settings.timeslotHeight),
-                    start = Math.floor($newRsvn.position().left / settings.timeslotWidth) + calStartTime,
-                    end = Math.floor($newRsvn.outerWidth() / settings.timeslotWidth) + start,
-                    date = _private.date.get().format('Y-m-d'),
-                    rsvn = {date: date, start: start + '', end: end + '', row: row};
-
-                $(this).data(pluginName).tempReservations.push(rsvn);
-                $newRsvn.on('click', rsvn, _private.listeners.removeRsvn.bind(this));
-
-                //callback
-                settings.onRsvnCreate.call(this, rsvn);
             }   
         },
 
