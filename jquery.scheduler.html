@@ -10,42 +10,66 @@
 
 <div id="scheduler" style="padding-top: 50px;"></div>
 <div id="log"></div>
+<!--added button to trigger saving of any newly added reservations-->
+<button id="reserve" type="button">Reserve</button>
 
 <script>
-// Sets dates for example reservations to always be on current day or after
-var date = new Date(),
-    day = date.getDate(),
-    date1 = new Date(),
-    date2 = new Date(),
-    date3 = new Date();
-date1.setDate(day);
-date2.setDate(day + 1);
-date3.setDate(day + 2);
-date1 = date1.format('Y-m-d');
-date2 = date2.format('Y-m-d');
-date3 = date3.format('Y-m-d');
-
-// Array of example date
-var reservations = [
-                {date: date3, start: '8:00', end: '13:00', row: 0}, 
-                {date: date1, start: '8:00', end: '16:00', row: 1}, 
-                {date: date1, start: '7:00', end: '9:00', row: 3}, 
-                {date: date1, start: '12:00', end: '20:00', row: 5}, 
-                {date: date2, start: '12:00', end: '18:00', row: 5}, 
-                {date: date3, start: '8:00', end: '18:00', row: 4}
-              ];
+// Gets a date object for today's date
+var today = new Date();
 
 // Array of sample items              
-var printers = ['Printer 1', 'Printer 2', 'Printer 3', 'Printer 4', 'Printer 5', 'Printer 6'];
+var spots = ['Spot 1', 'Spot 2', 'Spot 3', 'Spot 4', 'Spot 5', 'Spot 6'];
 
-// Initialize 
-$("#scheduler").scheduler({items: printers, reservations: reservations, timeslotHeight: 70, timeslotWidth: 100});
+// Initialize as before except with two extra options: startDate and endDate. These will set the days you can view
+// on the calendar. By setting them both to today, only today will be viewable.
+$("#scheduler").scheduler({items: spots, timeslotHeight: 70, timeslotWidth: 100, startDate: today, endDate: today});
 
-// Allows for reservation deletion
-$(document).on('click', ".reservation", function () {
-    $(this).remove();
+// Load reservations from database here. Reservations will now be loaded with a public plugin method called loadRsvns.
+// Plugin methods can be called by passing the method name to the plugin function followed by any parameters shown below. 
+// I used jQuery function ajax here but you can use load or getJson, just make sure to call the loadRsvns method in the
+// done/success callback.
+$.ajax({
+    url: 'getRsvns.php', //put the name of your own backend script here, should return an array of reservation objects
+    type: 'GET',
+    dataType: 'json'
+}).done(function(rsvns) {
+    // Done is called when the call to the backend was successful and should recieve the stored reservations as a
+    // parameter. Call loadRsvns here. 
+    // Here you can see how to call a plugin method. The methods name is passed to the plugin function first, then
+    // any parameters for the method. This method takes an array of reservation objects as its only parameter. This
+    // array should be identical in type to the one passed into the previous plugin version's options.
+    $("#scheduler").scheduler("loadRsvns", rsvns);
+}).fail(function(xhr, status, error) {
+    // do something if the call fails
 });
 
+// Save reservations to database here. I created a button in the HTML with the id "reserve" and add a click event to 
+// trigger this.
+// All new reservations are saved in an array for temporary reservations. You can access this array using the plugin
+// methods getNewRsvns. It doesn't take an parameters and returns an array of new reservation objects. You can use
+// this array to save the reservations to the database.
+$("#reserve").click(function() {
+    // Call getNewRsvns here to get the array of new reservation objects and save it in variable rsvn
+    var rsvns = $("#scheduler").scheduler('getNewRsvns');
+    
+    // Only do anything if new reservations actually exist
+    if (rsvns.length != 0) {
+        $.ajax({
+            url: 'saveRsvns.php', //put the name of your own backend script here, should save the array of reservation objects
+            data: { 
+                rsvns: rsvns
+            },
+            type: 'POST'
+        }).done(function() {
+            // Once the reservations are successfully saved to the server, call plugin method updateRsvns. It acts similar
+            // to loadRsvns but is meant for finallizing reservations from the new reservations array. Here you pass in the
+            // the new reservations array and it will change them to final reservations that can't be deleted.
+            $("#scheduler").scheduler("updateRsvns", rsvns);
+        }).fail(function(xhr, status, error) {
+            //do something if the call fails
+        });
+    }
+});
 </script>
 
 </body>
