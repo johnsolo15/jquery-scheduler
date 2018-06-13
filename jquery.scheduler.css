@@ -109,6 +109,12 @@ body {
   z-index: 2;
 }
 
+.reservation-temp {
+  background: #fffff0;
+  background: linear-gradient(#1abc9c, #179b81);
+  z-index: 2;
+}
+
 .reservation-creating {
   background: #b3b3b3;
   background: linear-gradient(#b3b3b3, #a6a6a6);

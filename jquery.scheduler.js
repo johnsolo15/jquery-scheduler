@@ -158,6 +158,13 @@
                 _private.unAttachEventListeners();
                 _private.attachEventListeners.call(this);
                 _private.showRsvns.call(this, today);
+            },
+
+            removeRsvn: function(e) {
+                var rsvns = $(this).data(pluginName).tempReservations,
+                    index = rsvns.indexOf(e.data);
+                rsvns.splice(index, 1);
+                $(e.target).remove();
             }
         },
 
@@ -235,11 +242,12 @@
                     $newRsvn.remove();
                 } else {
                     $newRsvn.removeClass("reservation-creating");
-                    $newRsvn.addClass("reservation-final");
+                    $newRsvn.addClass("reservation-temp");
                 }
+
                 $(".row-container").off("mousemove.newevent");
                 $(document).off("mouseup.newevent");
-                
+
                 if (settings.use24Hour == true) {
                     var calStartTime = parseInt(settings.startTime.split(":")[0]);
                 } else {
@@ -252,11 +260,9 @@
                     date = _private.date.get().format('Y-m-d'),
                     rsvn = {date: date, start: start + '', end: end + '', row: row};
 
-                //possibly use methods.loadRsvn but would need to create a separate public showRsvn method instead
-                //of calling inside loadRsvn
-                $(this).data(pluginName).reservations[rsvn.date] = $(this).data(pluginName).reservations[rsvn.date] || [];
-                $(this).data(pluginName).reservations[rsvn.date].push(rsvn);
-                
+                $(this).data(pluginName).tempReservations.push(rsvn);
+                $newRsvn.on('click', rsvn, _private.listeners.removeRsvn.bind(this));
+
                 //callback
                 settings.onRsvnCreate.call(this, rsvn);
             }   
@@ -359,6 +365,7 @@
         // Clears all reservations off of the calendar
         clearCalendar: function() {
             $(this).find(".reservation").remove();
+            $(this).data(pluginName).tempReservations = [];
         },
         
         /* 
@@ -416,7 +423,8 @@
             return this.each(function() {
                 data = {
                     settings: $.extend({}, defaults, options),
-                    reservations: {}
+                    reservations: {},
+                    tempReservations: []
                 };
                 $(this).data(pluginName, data);
                 _private.render.calendar.call(this);
